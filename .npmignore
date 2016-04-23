@@ -1,5 +1,6 @@
-.git
-nodemon.json
+.git*
+readme*
+nodemon*
 src
 test
 Cakefile
