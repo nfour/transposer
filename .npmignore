@@ -2,5 +2,5 @@
 readme*
 nodemon*
 src
-test
+dist/test
 Cakefile

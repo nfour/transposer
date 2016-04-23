@@ -1,12 +1,12 @@
-typeOf = require 'lutils/typeOf'
+typeOf = require 'lutils-typeof'
 
 module.exports = class Transposer
 	constructor: (@data = {}) ->
-	
+
 	###
 		Turns `data.key[1].c` into its represented data structure.
 		Sets the last key in the string to a value.
-		
+
 		Returns null on an invalid dataKey.
 
 		@param	obj {Object}	'info[2].prop'
@@ -18,7 +18,7 @@ module.exports = class Transposer
 				([\w]+)
 			|	(\[ ["']?[^\[]+["']? \])
 		///g
-		
+
 		if not parts.length > 1
 			return { "#{dataKey}": value }
 
@@ -48,34 +48,34 @@ module.exports = class Transposer
 		for item, index in map[1..]
 			if last.key not of next
 				next[ last.key ] = item.parent
-			
+
 			next = next[ last.key ]
 			last = item
 
 		next[ last.key ] = value
-			
+
 		return wrap
-	
+
 	###
 		Transposes all properties of `object`, modifying `object`.
 		Any dataKey is deleted from the object in place of the transposed parent key.
-		
+
 		@param obj {Object}	{ 'a.b': 1 }
 		@return obj			{ a: { b: 1 } }
-	
+
 	###
 	transposeAll: (object) ->
 		for key, value of object
 			if ( transposed = @transpose key, value ) isnt null
 				delete object[key]
 				@merge object, transposed
-				
+
 		return object
 
-	
+
 	###
 		Sets a value in `this.data`.
-	
+
 		@param transposed {String or Object} A dataKey or an object (such as that returned by .transpose())
 		@param value {mixed} A value to set that property, only used if `transposed` is a string
 		@return @data
@@ -85,23 +85,23 @@ module.exports = class Transposer
 			transposed = @transpose transposed, value
 
 		return @merge @data, transposed, null, true
-	
+
 	###
 		Finds a value in `this.data`.
-		
+
 		@param transposed {String or Object} A dataKey or an object (such as that returned by .transpose())
 		@return {mixed} undefined if not found, the value otherwise
 	###
 	get: (transposed) ->
 		return @data if not transposed?
-		
+
 		if typeOf.String transposed
 			transposed = @transpose transposed
-		
+
 		iterator = (pos1, pos2) ->
 			state1 = ( type = typeOf pos1 ) is 'object' or type is 'array'
 			state2 = ( type = typeOf pos2 ) is 'object' or type is 'array'
-			
+
 			if state1 and state2
 				break for key1, val1 of pos1
 
@@ -109,15 +109,15 @@ module.exports = class Transposer
 					return iterator val1, pos2[ key1 ]
 			else if not state1
 				return pos2
-			
+
 			return undefined
 
 		return iterator transposed, @data
-	
+
 	###
 		Merges obj2 into obj1, optionally overwriting properties.
 		Tries to always maintain an object's reference in obj1 unless `overwritten` is `true`.
-		
+
 		@param obj1 {Object}		{ a: { c: 1 } }
 		@param obj2 {Object}		{ a: { d: 2 } }
 		@param depth {Number}		16
