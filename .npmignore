@@ -1,5 +1,5 @@
 .git*
-readme*
+README.md
 nodemon*
 src
 dist/test
