@@ -1,18 +1,18 @@
 # Trasposer
-A small and fast *"dataKey"* transposer. 
+A small and fast *"dataKey"* transposer.
 
 This module turns `here.is[2].some["!data!"]` into
 ```js
 {
-	here: {
-		is: [
-			, , { some: { "!data!": 'a value' } }
-		]
-	}
+    here: {
+        is: [
+            , , { some: { "!data!": 'a value' } }
+        ]
+    }
 }
 ```
 
-The dataKey syntax is just javascript.  
+The dataKey syntax is just javascript.
 You can even start the dataKey with an array index to create an array.
 ```js
 new Transposer().transpose( '[1].test', 'test' ) // returns [ , { test: 'test' } ]
@@ -60,9 +60,9 @@ Any dataKey is deleted from the object in place of the transposed parent key.
 
 ```js
 data = {
-	'name[0]': 'Jim'
-	'name[1]': 'Bob'
-	type: 'person'
+    'name[0]': 'Jim'
+    'name[1]': 'Bob'
+    type: 'person'
 }
 
 transposer.transposeAll(data)
@@ -93,4 +93,3 @@ transposer.get({ some: { data: null } })// returns 500
 #### .merge( obj1, obj2, depth = 16, overwrite = false )
 Merges obj2 into obj1, optionally overwriting properties.
 Tries to always maintain an object's reference in obj1 unless `overwritten` is `true`.
- 
